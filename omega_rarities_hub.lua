@@ -1,4 +1,4 @@
-local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/'
+local repo = 'https://raw.githubusercontent.com/nuwub/OR2/main/'
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
@@ -1195,7 +1195,7 @@ GeneratorBox:AddButton({
    Text = 'level up generator 1',
    Func = function()
       pcall(function()
-         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer("Generator1")
+         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer(1)
       end)
    end
 })
@@ -1204,7 +1204,7 @@ GeneratorBox:AddButton({
    Text = 'level up generator 2',
    Func = function()
       pcall(function()
-         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer("Generator2")
+         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer(2)
       end)
    end
 })
@@ -1213,7 +1213,7 @@ GeneratorBox:AddButton({
    Text = 'level up generator 3',
    Func = function()
       pcall(function()
-         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer("Generator3")
+         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer(3)
       end)
    end
 })
@@ -1249,9 +1249,9 @@ spawn(function()
    while true do
       wait(0.5)
       if autoLevelGenerators then
-         for _, genId in ipairs({"Generator1", "Generator2", "Generator3"}) do
+         for i = 1, 3 do
             pcall(function()
-               game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer(genId)
+               game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer(i)
             end)
             wait(0.2)
          end
@@ -1341,4 +1341,3 @@ SaveManager:SetIgnoreIndexes({'MenuKeybind'})
 SaveManager:SetFolder('omega_rarities/configs')
 SaveManager:BuildConfigSection(Tabs.Settings)
 SaveManager:LoadAutoloadConfig()
-
