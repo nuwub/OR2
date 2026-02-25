@@ -1195,7 +1195,7 @@ GeneratorBox:AddButton({
    Text = 'level up generator 1',
    Func = function()
       pcall(function()
-         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer(1)
+         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer("Generator1")
       end)
    end
 })
@@ -1204,7 +1204,7 @@ GeneratorBox:AddButton({
    Text = 'level up generator 2',
    Func = function()
       pcall(function()
-         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer(2)
+         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer("Generator2")
       end)
    end
 })
@@ -1213,7 +1213,7 @@ GeneratorBox:AddButton({
    Text = 'level up generator 3',
    Func = function()
       pcall(function()
-         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer(3)
+         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer("Generator3")
       end)
    end
 })
@@ -1249,9 +1249,9 @@ spawn(function()
    while true do
       wait(0.5)
       if autoLevelGenerators then
-         for i = 1, 3 do
+         for _, g in ipairs({"Generator1","Generator2","Generator3"}) do
             pcall(function()
-               game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer(i)
+               game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer(g)
             end)
             wait(0.2)
          end
@@ -1309,6 +1309,114 @@ spawn(function()
       end
    end
 end)
+
+-- =====================
+-- MOBS TAB
+-- =====================
+local MobsTab = Window:AddTab('mobs')
+local MobsUpgradeBox = MobsTab:AddLeftGroupbox('mobs upgrades')
+local MobsAutoBox = MobsTab:AddRightGroupbox('mobs automations')
+local MobsLevelBox = MobsTab:AddRightGroupbox('mob level')
+
+local autoClickMob = false
+
+-- AUTO MOB CLICK LOOP
+spawn(function()
+   while true do
+      wait(0.05)
+      if autoClickMob then
+         pcall(function()
+            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("DamageMob"):FireServer()
+         end)
+      end
+   end
+end)
+
+-- MOBS UPGRADES (0-5, currency: SpiritOrbs)
+MobsUpgradeBox:AddButton({
+   Text = 'select all',
+   Func = function()
+      for _, id in pairs({'MobsUpgrade0','MobsUpgrade1','MobsUpgrade2','MobsUpgrade3','MobsUpgrade4','MobsUpgrade5'}) do
+         Toggles[id]:SetValue(true)
+      end
+   end,
+}):AddButton({
+   Text = 'deselect all',
+   Func = function()
+      for _, id in pairs({'MobsUpgrade0','MobsUpgrade1','MobsUpgrade2','MobsUpgrade3','MobsUpgrade4','MobsUpgrade5'}) do
+         Toggles[id]:SetValue(false)
+      end
+   end,
+})
+
+MobsUpgradeBox:AddToggle('MobsUpgrade0', {
+   Text = 'more damage',
+   Default = false,
+}):OnChanged(function(value)
+   activeUpgrades['mob0'] = value and "MobsUpgrades_0" or nil
+end)
+
+MobsUpgradeBox:AddToggle('MobsUpgrade1', {
+   Text = 'more spirit orbs',
+   Default = false,
+}):OnChanged(function(value)
+   activeUpgrades['mob1'] = value and "MobsUpgrades_1" or nil
+end)
+
+MobsUpgradeBox:AddToggle('MobsUpgrade2', {
+   Text = 'more lava',
+   Default = false,
+}):OnChanged(function(value)
+   activeUpgrades['mob2'] = value and "MobsUpgrades_2" or nil
+end)
+
+MobsUpgradeBox:AddToggle('MobsUpgrade3', {
+   Text = 'more ash',
+   Default = false,
+}):OnChanged(function(value)
+   activeUpgrades['mob3'] = value and "MobsUpgrades_3" or nil
+end)
+
+MobsUpgradeBox:AddToggle('MobsUpgrade4', {
+   Text = 'more luck',
+   Default = false,
+}):OnChanged(function(value)
+   activeUpgrades['mob4'] = value and "MobsUpgrades_4" or nil
+end)
+
+MobsUpgradeBox:AddToggle('MobsUpgrade5', {
+   Text = 'more xp',
+   Default = false,
+}):OnChanged(function(value)
+   activeUpgrades['mob5'] = value and "MobsUpgrades_5" or nil
+end)
+
+-- MOBS AUTOMATIONS
+MobsAutoBox:AddToggle('AutoClickMob', {
+   Text = 'auto kill mob',
+   Default = false,
+}):OnChanged(function(value)
+   autoClickMob = value
+end)
+
+-- MOB LEVEL
+MobsLevelBox:AddButton({
+   Text = 'next level',
+   Func = function()
+      pcall(function()
+         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("ChangeMobLevel"):FireServer(1)
+      end)
+   end
+})
+
+MobsLevelBox:AddButton({
+   Text = 'previous level',
+   Func = function()
+      pcall(function()
+         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("ChangeMobLevel"):FireServer(-1)
+      end)
+   end
+})
 
 -- =====================
 -- SETTINGS TAB
