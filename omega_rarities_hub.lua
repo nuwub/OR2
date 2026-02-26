@@ -1195,7 +1195,7 @@ GeneratorBox:AddButton({
    Text = 'level up generator 1',
    Func = function()
       pcall(function()
-         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer("Generator1")
+         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer("1")
       end)
    end
 })
@@ -1204,7 +1204,7 @@ GeneratorBox:AddButton({
    Text = 'level up generator 2',
    Func = function()
       pcall(function()
-         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer("Generator2")
+         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer("2")
       end)
    end
 })
@@ -1213,7 +1213,7 @@ GeneratorBox:AddButton({
    Text = 'level up generator 3',
    Func = function()
       pcall(function()
-         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer("Generator3")
+         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer("3")
       end)
    end
 })
@@ -1247,14 +1247,14 @@ end)
 -- AUTO GENERATOR LEVEL LOOP
 spawn(function()
    while true do
-      wait(0.5)
+      wait(1)
       if autoLevelGenerators then
-         for _, g in ipairs({"Generator1","Generator2","Generator3"}) do
-            pcall(function()
-               game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer(g)
-            end)
-            wait(0.2)
-         end
+         pcall(function() game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer("1") end)
+         wait(0.5)
+         pcall(function() game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer("2") end)
+         wait(0.5)
+         pcall(function() game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Generator"):FireServer("3") end)
+         wait(0.5)
       end
    end
 end)
