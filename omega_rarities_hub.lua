@@ -66,6 +66,7 @@ local Tabs = {
    Snow = Window:AddTab('snow world'),
    Space = Window:AddTab('space world'),
    Volcano = Window:AddTab('volcano world'),
+   Clover = Window:AddTab('st. patricks day'),
    Settings = Window:AddTab('settings'),
 }
 
@@ -106,6 +107,7 @@ local autoPlasma = false
 local autoSnow = false
 local autoClickSnowflakes = false
 local autoConvertStardust = false
+local autoClover = false
 
 -- function to check if category has active upgrades
 local function hasActiveUpgrades(category)
@@ -236,6 +238,42 @@ spawn(function()
                   for _, ball in pairs(balls) do
                      if ball:IsA("BasePart") then
                         hrp.CFrame = CFrame.new(ball.Position + Vector3.new(0, 3, 0))
+                        wait(0.1)
+                     end
+                  end
+               else
+                  hrp.CFrame = CFrame.new(zoneCenter + Vector3.new(0, 3, 0))
+               end
+            end
+         end)
+      end
+   end
+end)
+
+-- AUTO CLOVER FARM LOOP
+spawn(function()
+   local zoneCenter = Vector3.new(-487.167, 111.261, -300)
+
+   while true do
+      wait(0.3)
+
+      if autoClover then
+         pcall(function()
+            local player = game.Players.LocalPlayer
+            local character = player and player.Character
+            local hrp = character and character:FindFirstChild("HumanoidRootPart")
+
+            if hrp then
+               local spawned = game:GetService("Workspace").Game.Clovers.Spawned_Clovers
+               local clovers = spawned:GetChildren()
+
+               if #clovers > 0 then
+                  for _, clover in pairs(clovers) do
+                     if clover:IsA("BasePart") then
+                        hrp.CFrame = CFrame.new(clover.Position + Vector3.new(0, 3, 0))
+                        wait(0.1)
+                     elseif clover:IsA("Model") and clover.PrimaryPart then
+                        hrp.CFrame = CFrame.new(clover.PrimaryPart.Position + Vector3.new(0, 3, 0))
                         wait(0.1)
                      end
                   end
@@ -1272,7 +1310,6 @@ spawn(function()
 end)
 
 -- AUTO ASH RESET LOOP (smart: watches Rarity, resets when it stops climbing)
--- Ash reset requires Rarity >= 525, resets Rarity back to 1
 spawn(function()
    while true do
       wait(5)
@@ -1291,13 +1328,11 @@ spawn(function()
             print("[ash reset] current rarity: " .. currentRarity .. " | last: " .. lastRank .. " | stall count: " .. sameRankCount)
             
             if currentRarity > lastRank then
-               -- Rarity went up, reset counter
                lastRank = currentRarity
                sameRankCount = 0
             else
                sameRankCount = sameRankCount + 1
                if sameRankCount >= rankCheckThreshold then
-                  -- Rarity stalled, do ash reset
                   print("[ash reset] rarity stalled at " .. currentRarity .. ", resetting ash!")
                   RS:WaitForChild("Events"):WaitForChild("Reset"):FireServer("Ash")
                   wait(3)
@@ -1417,6 +1452,18 @@ MobsLevelBox:AddButton({
       end)
    end
 })
+
+-- =====================
+-- ST. PATRICK'S DAY TAB
+-- =====================
+local CloverAutoBox = Tabs.Clover:AddLeftGroupbox('clover automations')
+
+CloverAutoBox:AddToggle('AutoClover', {
+   Text = 'auto farm clovers',
+   Default = false,
+}):OnChanged(function(value)
+   autoClover = value
+end)
 
 -- =====================
 -- SETTINGS TAB
